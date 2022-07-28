@@ -9,7 +9,7 @@ Use IntestLine application implemented in FASTGenomics\
 Step 2: Select backbone points\
 Step 3: Unroll\
 Step 4: Overlay parameters on the linear structure\
-Use IntestLine locally\
+Use IntestLine locally
 
 # Step 1 Upload data
 1.1 Upload CODEX-exported .csv file, containing x and y coordinates.\
