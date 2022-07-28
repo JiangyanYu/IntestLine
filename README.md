@@ -8,7 +8,7 @@ Use IntestLine application implemented in FASTGenomics\
 [Step 1: Upload data](#step-1-Upload-data)\
 Step 2: Select backbone points\
 Step 3: Unroll\
-Step 4: Overlay parameters on the linear structure
+Step 4: Overlay parameters on the linear structure\
 Use IntestLine locally\
 
 # Step 1 Upload data
@@ -31,3 +31,7 @@ Use IntestLine locally\
 # Step 4: Overlay parameters on the linear structure
 4.1 You can overlay expressed markers over the stretched image.\
 4.2 This can be used to examine marker expression along the length and thickness of the organ.
+
+# Cite IntestLine
+
+
