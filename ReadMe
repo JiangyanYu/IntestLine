@@ -3,7 +3,9 @@ This script is inspired by Parigi et al (https://www.nature.com/articles/s41467-
 The method is impletmented in a shiny-based web application: https://beta.fastgenomics.org/a/intestline
 
 User manual
-1. Upload data
+[1. Upload data](#1.Upload data)
 2. Select backbone points
 3. Unroll
 4. Overlay parameters on the linear structure
+
+1.Upload data
