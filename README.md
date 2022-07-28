@@ -9,7 +9,7 @@ Step 2: Select backbone points\
 Step 3: Unroll\
 Step 4: Overlay parameters on the linear structure
 
-# Step 1:Upload data
+# Step 1: Upload data
 1.1 Upload CODEX-exported .csv file, containing x and y coordinates.\
 1.2 If available, you can upload previously created backbone file.\
 1.3 Select Region of Interest (ROI) by first choosing a center for the image.\
