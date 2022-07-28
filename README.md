@@ -5,8 +5,8 @@ The method is implemented in a shiny-based web application: https://beta.fastgen
 
 # User manual
 Option 1: Use IntestLine application implemented in FASTGenomics\
-[Step 1: Upload data](#step-1-----Upload-data)\
-[Step 2: Select backbone points](#step-2-----Select-backbone-points)\
+[Step 1: Upload data](#step-1---Upload-data)\
+[Step 2: Select backbone points](#step-2---Select-backbone-points)\
 Step 3: Unroll\
 Step 4: Overlay parameters on the linear structure\
 Option 2: Use IntestLine locally
