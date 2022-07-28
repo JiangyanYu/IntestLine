@@ -11,7 +11,6 @@ library(ggtext)
 library(data.table)
 library(readr)
 
-# source(file = "/home/yu.j/sciebo/Projects/CODEX_ownerJY/image-shiny-base-main-IntestLine/APP/functions.R")
 source(file = "functions.R")
 
 ####
