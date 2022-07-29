@@ -1,5 +1,5 @@
 # IntestLine 
-<img src="IntestLine-Logo.png" align="center" width=120 height=139 alt="" />
+<img src="IntestLine-Logo.png" align="right" width=120 height=139 alt="" />
 
 This package is aiming to unroll intestinal images from CODEX.\
 This script is inspired by Parigi et al (https://www.nature.com/articles/s41467-022-28497-0). \
