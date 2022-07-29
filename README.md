@@ -1,9 +1,7 @@
 # IntestLine 
 <img src="IntestLine-Logo.png" align="right" width=120 height=139 alt="" />
 
-This package is aiming to unroll intestinal images from CODEX.\
-This script is inspired by Parigi et al (https://www.nature.com/articles/s41467-022-28497-0). \
-The method is implemented in a shiny-based web application: https://beta.fastgenomics.org/a/intestline
+IntestLine is developed to convert intestine images prepared by Swiss-roll technique into a linear system. It is suitable to process CODEX images or 10x spatial transcriptomics images, besically any images providing xy-coordinates.
 
 # User manual
 Option 1: Use IntestLine application implemented in FASTGenomics\
@@ -37,5 +35,9 @@ Option 2: Use IntestLine locally
 4.2 This can be used to examine marker expression along the length and thickness of the organ.
 
 # Cite us
+
+This package is aiming to unroll intestinal images from CODEX.\
+This script is inspired by Parigi et al (https://www.nature.com/articles/s41467-022-28497-0). \
+The method is implemented in a shiny-based web application: https://beta.fastgenomics.org/a/intestline
 
 
