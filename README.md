@@ -1,6 +1,5 @@
-# IntestLine 
 <img src="IntestLine-Logo.png" align="right" width=120 height=139 alt="" />
-
+# IntestLine 
 IntestLine is developed to convert intestine images prepared by Swiss-roll technique into a linear system. It is suitable to process CODEX images or 10x spatial transcriptomics images, besically any images providing xy-coordinates.
 
 # User manual
