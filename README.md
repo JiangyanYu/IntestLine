@@ -35,6 +35,6 @@ Option 2: Use IntestLine locally
 4.1 You can overlay expressed markers over the stretched image.\
 4.2 This can be used to examine marker expression along the length and thickness of the organ.
 
-# Cite IntestLine
+# Cite us
 
 
