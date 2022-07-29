@@ -15,11 +15,11 @@ Option 1: Use IntestLine application implemented in FASTGenomics\
 Option 2: Use IntestLine locally
 
 # Step 1: Upload data (Upper left panel in grey)
-1. Go to website https://beta.fastgenomics.org/a/intestline To use the application, unfortunately you need to login with an account. You can register a your own account, but to test the application you can also use our IntestLine account (Username: intestline@gmail.com Password: intestline).\
-3.1 Upload CODEX-exported .csv file, containing x and y coordinates.\
-4.2 If available, you can upload previously created backbone file.\
-5.3 Select Region of Interest (ROI) by first choosing a center for the image.\
-6.4 Then choose parameters a and b to highlight the elliptical area of interest.
+1.1 Go to website https://beta.fastgenomics.org/a/intestline To use the application, unfortunately you need to login with an account. You can register a your own account, but to test the application you can also use our IntestLine account (Username: intestline@gmail.com Password: intestline).\
+1.2 Upload CODEX-exported .csv file, containing x and y coordinates.\
+1.3 If available, you can upload previously created backbone file.\
+1.4 Select Region of Interest (ROI) by first choosing a center for the image.\
+1.5 Then choose parameters a and b to highlight the elliptical area of interest.
 
 # Step 2: Select backbone points (Upper right panel in blue)
 2.1 Create a backbone by pressing with the mouse on the edge of the structures.\
