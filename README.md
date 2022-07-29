@@ -14,7 +14,7 @@ Option 1: Use IntestLine application implemented in FASTGenomics\
 
 Option 2: Use IntestLine locally
 
-# Step 1: Upload data (Upper left panel in grey)
+# Step 1: Upload data (Upper left panel in grey)\
 1.1 Go to website https://beta.fastgenomics.org/a/intestline To use the application, unfortunately you need to login with an account. You can register a your own account, but to test the application you can also use our IntestLine account (Username: intestline@gmail.com Password: intestline).\
 1.2 Upload CODEX-exported .csv file, containing x and y coordinates.\
 1.3 If available, you can upload previously created backbone file.\
