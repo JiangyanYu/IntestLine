@@ -4,13 +4,15 @@
 IntestLine is developed to convert intestine images prepared by Swiss-roll technique into a linear system. It is suitable to process CODEX images or 10x spatial transcriptomics images, besically any images providing xy-coordinates.
 
 # User manual
-Option 1: Use IntestLine application implemented in FASTGenomics\
+Option 1: Use IntestLine via docker\
+
+Option 2: Use IntestLine application implemented in FASTGenomics\
 [Step 1: Upload data](#step-1-Upload-data)\
 [Step 2: Select backbone points](#step-2-Select-backbone-points)\
 [Step 3: Unroll](#step-3-Unroll)\
 [Step 4: Overlay parameters on the linear structure](#step-4-Overlay-parameters-on-the-linear-structure)
 
-Option 2: Use IntestLine locally
+Option 3: Use IntestLine locally\
 
 # Step 1: Upload data (Upper left panel in grey)
 1.1 Go to website https://beta.fastgenomics.org/a/intestline To use the application, unfortunately you need to login with an account. You can register a your own account, but to test the application you can also use our IntestLine account (Username: intestline@gmail.com Password: intestline).\
