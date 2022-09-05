@@ -37,7 +37,7 @@ ui = shinyUI(fluidPage(
   titlePanel(title = div(img(src = "IntestLine-Logo.png", height = 100, width = 100),
                          "IntestLine - Digitally unroll your intestinal images")),
   
-## panel upper left:  upload data and select regions ---- 
+  ## panel upper left:  upload data and select regions ---- 
   column(
     wellPanel( width = 6,
                style = "background:#b3b3b3" ,
@@ -185,8 +185,8 @@ ui = shinyUI(fluidPage(
                )
     ),
     width = 6),
-
-## panel upper right: select backbone ----
+  
+  ## panel upper right: select backbone ----
   column( width = 6,
           wellPanel(
             style = "background:#99ccff",
@@ -215,7 +215,7 @@ ui = shinyUI(fluidPage(
                  distal in order. The order you select your points will be used
                  to order your base layer. You can skip this step if you have 
                  uploaded one outline file and go to step 2.5.", 
-                 style = "color:#993333;font-size:18;")),
+                            style = "color:#993333;font-size:18;")),
                 #'A minimum number of outline points must be selected for
                 #' effective analysis.',
                 sep = "<br/>"
@@ -225,23 +225,23 @@ ui = shinyUI(fluidPage(
             plotOutput("plotSelectBackbone", click = "clicked",
                        height = "550px",width = "100%"),
             br(),
-           fluidRow(column(
+            fluidRow(column(
               width = 4,
               offset = 4,
               downloadButton('downloadData', 'Download Backbone',
                              style = "background:#cccc00;color:white;")
             )),
             hr(),
-           fluidRow(
-             column(width = 4,
-                    offset = 4,
-                    actionButton("backbonePlotButton",
-                                "2.5. Plot backbone on ROI",
-                                 icon = icon("diagram-project"),
-                                 style = "background:#669900;color:white;")
-             )
-           ),
-           br(),
+            fluidRow(
+              column(width = 4,
+                     offset = 4,
+                     actionButton("backbonePlotButton",
+                                  "2.5. Plot backbone on ROI",
+                                  icon = icon("diagram-project"),
+                                  style = "background:#669900;color:white;")
+              )
+            ),
+            br(),
             plotOutput("backbonePlot",height = "550px",width = "100%"),
             hr(),
             fluidRow(
@@ -249,15 +249,15 @@ ui = shinyUI(fluidPage(
                 width =4,
                 offset = 4,
                 actionButton("qualityControl", "QC of backbone selection",  
-                            icon = icon("clipboard-check"),
+                             icon = icon("clipboard-check"),
                              style = "background:#ff9966;color:white;")
               )
             ),
-           br(),
+            br(),
             plotlyOutput("quality_plot")
           )
   ),
-## panel middle: linear structure ----
+  ## panel middle: linear structure ----
   column(width = 12,
          wellPanel(
            style = "background:#99ffcc",
@@ -315,9 +315,9 @@ ui = shinyUI(fluidPage(
                width = 3,
                plotOutput("angle_loss")
              ),
-           # ),
-           # p(),
-           # fluidRow(
+             # ),
+             # p(),
+             # fluidRow(
              column(
                width = 3,
                plotOutput("zscore_loss_hist")
@@ -333,13 +333,13 @@ ui = shinyUI(fluidPage(
              column(width = 12,
                     plotOutput("line_plot",
                                height = "300px",width = "100%"
-                               )
+                    )
              )
              # column(width = 6,
              #        plotOutput("lost_cells")
              # )
            ),
-## panel bottom: linear structure ----
+           ## panel bottom: linear structure ----
            hr(),
            fluidRow(column(
              width = 2,
@@ -407,10 +407,10 @@ server = shinyServer(function(input, output, session) {
       )
     return(df)
   })
-## Upload main data ----
-    observeEvent(input$uploadData, {
+  ## Upload main data ----
+  observeEvent(input$uploadData, {
     input_image = data_upload()
-        output$plotOverview = renderPlot({
+    output$plotOverview = renderPlot({
       plot.new()
     })
     output$plotROI = renderPlot({
@@ -490,7 +490,7 @@ server = shinyServer(function(input, output, session) {
                  ignoreInit = T,
                  priority = -1)
   })
-## Select backbone ----
+  ## Select backbone ----
   observeEvent(input$uploadROI, {
     image_ROI = data_upload()
     x0 = input$chooseX0
@@ -499,7 +499,7 @@ server = shinyServer(function(input, output, session) {
     ey = input$chooseEy
     a = input$chooseA
     b = input$chooseB
-### select ROI ----
+    ### select ROI ----
     image_ROI$distance2center = (image_ROI$x - x0) ^ 2 / a ^ 2 + (image_ROI$y - y0) ^ 2 / b ^ 2
     image_ROI = filter(image_ROI, distance2center < 1)
     image_ROI$pos = paste0(image_ROI$x,"_",image_ROI$y)
@@ -527,8 +527,8 @@ server = shinyServer(function(input, output, session) {
     output$zscore_loss_hist = renderPlot({
       plot.new()
     })
-### select backbone ----
-
+    ### select backbone ----
+    
     upload_backbone = outline_upload()
     selected_backbone = selected_backbone[0, ]
     percent_cell = input$percentCells
@@ -551,12 +551,12 @@ server = shinyServer(function(input, output, session) {
       # http://stackoverflow.com/a/13763299/3817004
       selected_backbone <<-
         selected_backbone[!(duplicated(selected_backbone) |
-                            duplicated(selected_backbone, fromLast = TRUE)),]
+                              duplicated(selected_backbone, fromLast = TRUE)),]
       #str(selected_backbone)
       return(selected_backbone)
     })
     
-### download backbone ----
+    ### download backbone ----
     output$downloadData <- downloadHandler(
       filename = function() {
         paste(
@@ -592,7 +592,7 @@ server = shinyServer(function(input, output, session) {
                    size = 0.5) +
         xlab("CODEX coordinate x") + ylab("CODEX coordinate y")
     })
-### View backbone plus image ----
+    ### View backbone plus image ----
     observeEvent(input$backbonePlotButton,{
       backbone_points = data.frame()
       if (isTruthy(upload_backbone)) {
@@ -633,9 +633,9 @@ server = shinyServer(function(input, output, session) {
               main = "Overview of the uploaded image and selected backbone"
             )
             points(backbone_points$x, backbone_points$y, pch=16,
-              col="red", cex = 0.5)
+                   col="red", cex = 0.5)
             showNotification("Use currently selected backbone points.",
-               type = "warning")
+                             type = "warning")
           })
         }
       }
@@ -643,7 +643,7 @@ server = shinyServer(function(input, output, session) {
     output$backbonePlot = renderPlot({
       plot.new()
     })
-### Quality control of backbone selection ----
+    ### Quality control of backbone selection ----
     observeEvent(input$qualityControl,
                  {
                    output$quality_plot <- renderPlotly({
@@ -671,245 +671,244 @@ server = shinyServer(function(input, output, session) {
                  },
                  ignoreInit = T,
                  priority = -2)
-## Unrolling ----
-  observeEvent(input$unrollData,{
-    input_image = data_upload()
-    x0 = input$chooseX0
-    y0 = input$chooseY0
-    ex = input$chooseEx
-    ey = input$chooseEy
-    a = input$chooseA
-    b = input$chooseB
-    if (isTruthy(outline_upload())) {
-      base_points = outline_upload()
-    } else{
-      base_points = selected()
-    }
-### Order base and calculate length 
-    ordered_base = order_base(backbone_points = base_points)
-    ordered_base$pos = paste0(ordered_base$x, "_", ordered_base$y)
-    ordered_base$distance2center = (ordered_base$x - x0) ^ 2 / a ^ 2 + (ordered_base$y - y0) ^ 2 / b ^ 2
-### Project all other points
-    input_image$pos = paste0(input_image$x, "_", input_image$y)
-    input_image$distance2center = (input_image$x - x0) ^ 2 / a ^ 2 + (input_image$y - y0) ^ 2 / b ^ 2
-    input_image = subset(input_image, distance2center < 1)
-    linear_image = project_points2base(backbone_points = ordered_base, query_points = input_image)
-
-### Filtering steps  (angle plus outlier)
-    ordered_base = zscore_per_backbone_point(converted_image = linear_image,backbone_points = ordered_base)
-    linear_image = qc_angle_outlier(converted_image = linear_image,x0=x0,y0=y0,backbone_points = ordered_base)
-    ##############################
-    ##
-    #
-    # We need to add "readr" package in install.R file for the FG Docker 
-    linear_image_clean = subset(linear_image,note=="Successfully projected" )
-    linear_image_clean$angleCBS = parse_number(linear_image_clean$angleCBS)
-    linear_image_clean$zscore = parse_number(linear_image_clean$zscore)
-
-    download_data = merge(linear_image, input_image, by = "pos", no.dups = T, suffixes = c("","1"))
-    download_data = select(download_data, -any_of(c("V1", "x1", "y1", "z1", "distance2center1",
-                                                "nearest_Row", "nearest_Column",
-                                                "shortest_path_order", "nn_index")))
-    download_data = rename(download_data, Thickness = nn_dist, Length = shortest_path_length)
-    write.csv(download_data,"linear_image_clean.csv", row.names = F)
-    updateNumericInput(session,
-                       inputId = "selectAngle", 
-                        label = paste0("Select projection angle to filter (",
+    ## Unrolling ----
+    observeEvent(input$unrollData,{
+      input_image = data_upload()
+      x0 = input$chooseX0
+      y0 = input$chooseY0
+      ex = input$chooseEx
+      ey = input$chooseEy
+      a = input$chooseA
+      b = input$chooseB
+      if (isTruthy(outline_upload())) {
+        base_points = outline_upload()
+      } else{
+        base_points = selected()
+      }
+      ### Order base and calculate length 
+      ordered_base = order_base(backbone_points = base_points)
+      ordered_base$pos = paste0(ordered_base$x, "_", ordered_base$y)
+      ordered_base$distance2center = (ordered_base$x - x0) ^ 2 / a ^ 2 + (ordered_base$y - y0) ^ 2 / b ^ 2
+      ### Project all other points
+      input_image$pos = paste0(input_image$x, "_", input_image$y)
+      input_image$distance2center = (input_image$x - x0) ^ 2 / a ^ 2 + (input_image$y - y0) ^ 2 / b ^ 2
+      input_image = subset(input_image, distance2center < 1)
+      linear_image = project_points2base(backbone_points = ordered_base, query_points = input_image)
+      
+      ### Filtering steps  (angle plus outlier)
+      ordered_base = zscore_per_backbone_point(converted_image = linear_image,backbone_points = ordered_base)
+      linear_image = qc_angle_outlier(converted_image = linear_image,x0=x0,y0=y0,backbone_points = ordered_base)
+      ##############################
+      ##
+      #
+      # We need to add "readr" package in install.R file for the FG Docker 
+      linear_image_clean = subset(linear_image,note=="Successfully projected" )
+      linear_image_clean$angleCBS = parse_number(linear_image_clean$angleCBS)
+      linear_image_clean$zscore = parse_number(linear_image_clean$zscore)
+      
+      download_data = merge(linear_image, input_image, by = "pos", no.dups = T, suffixes = c("","1"))
+      download_data = select(download_data, -any_of(c("V1", "x1", "y1", "z1", "distance2center1",
+                                                      "shortest_path_order", "nn_index")))
+      download_data = rename(download_data, Thickness = nn_dist, Length = shortest_path_length)
+      write.csv(download_data,"linear_image_clean.csv", row.names = F)
+      updateNumericInput(session,
+                         inputId = "selectAngle", 
+                         label = paste0("Select projection angle to filter (",
                                         round(min(linear_image_clean$angleCBS)),
                                         " to ",
                                         round(max(linear_image_clean$angleCBS))+1,
                                         ")"),
-                       min = round(min(linear_image_clean$angleCBS)),
-                       max = round(max(linear_image_clean$angleCBS))+1,
-                       value = round(0.75*max(linear_image_clean$angleCBS))
-                       )
-
-    updateNumericInput(session,
-                       inputId = "selectZscore", 
-                       label = paste0("Select z-score to filter (",
+                         min = round(min(linear_image_clean$angleCBS)),
+                         max = round(max(linear_image_clean$angleCBS))+1,
+                         value = round(0.75*max(linear_image_clean$angleCBS))
+      )
+      
+      updateNumericInput(session,
+                         inputId = "selectZscore", 
+                         label = paste0("Select z-score to filter (",
                                         round(min(linear_image_clean$zscore, na.rm = T)),
                                         " to ",
                                         round(max(linear_image_clean$zscore, na.rm = T))+1,
                                         ")"),
-                       min = round(min(linear_image_clean$zscore, na.rm = T)),
-                       max = round(max(linear_image_clean$zscore, na.rm = T))+1,
-                       value = round(0.75*max(linear_image_clean$zscore, na.rm = T))
-    )
-    all_names = colnames(input_image)
-    wrong_names = c("pos", "x", "y", "z", "distance2center", "nn_index",
+                         min = round(min(linear_image_clean$zscore, na.rm = T)),
+                         max = round(max(linear_image_clean$zscore, na.rm = T))+1,
+                         value = round(0.75*max(linear_image_clean$zscore, na.rm = T))
+      )
+      all_names = colnames(input_image)
+      wrong_names = c("pos", "x", "y", "z", "distance2center", "nn_index",
                       "nn_dist", "nearest_Row", "nearest_Column",
                       "shortest_path_order", "shortest_path_length", "note",
                       "angleCBS", "zscore", "V1", "cell_id", "region",
                       "tile_num", "x1", "y1", "z1", "x_tile", "y_tile","size",
                       "tsne_x", "tsne_y", "homogeneity", "distance2center1")
-    names <- all_names[! all_names %in% wrong_names]
-    updateSelectizeInput(session,
-                         "selectMarker",
-                         choices = names,
-                         selected = names[1],
-                         server = TRUE)
-    output$angle_loss = renderPlot({
-      plot_angle_loss = subset(linear_image_clean, angleCBS > input$selectAngle )
-      title_angle_loss = paste(nrow(plot_angle_loss),
-                               "out of",
-                               nrow(linear_image_clean),
-                               "cells are removed \ndue to 
+      names <- all_names[! all_names %in% wrong_names]
+      updateSelectizeInput(session,
+                           "selectMarker",
+                           choices = names,
+                           selected = names[1],
+                           server = TRUE)
+      output$angle_loss = renderPlot({
+        plot_angle_loss = subset(linear_image_clean, angleCBS > input$selectAngle )
+        title_angle_loss = paste(nrow(plot_angle_loss),
+                                 "out of",
+                                 nrow(linear_image_clean),
+                                 "cells are removed \ndue to 
                                projection angle filtering")
-      plot(
-        linear_image_clean$x,
-        linear_image_clean$y,
-        cex = input$pointSize/100,
-        pch = 16,
-        ylab = "CODEX coordinate y",
-        xlab = "CODEX coordinate x",
-        main = title_angle_loss,
-        col.main = "red"
-      )
-      points(
-        plot_angle_loss$x,
-        plot_angle_loss$y,
-        cex = input$pointSize/100,
-        pch = 16,
-        col = "red"
-      )
-    })
-    output$zscore_loss = renderPlot({
-      plot_zscore_loss = subset(linear_image_clean, zscore > input$selectZscore )
-      title_zscore_loss = paste(nrow(plot_zscore_loss),
-                               "out of",
-                               nrow(linear_image_clean),
-                               "cells are removed \ndue to Z-score filtering")
-      plot(
-        linear_image_clean$x,
-        linear_image_clean$y,
-        cex = input$pointSize/100,
-        pch = 16,
-        ylab = "CODEX coordinate y",
-        xlab = "CODEX coordinate x",
-        main = title_zscore_loss,
-        col.main = "orange"
-      )
-      points(
-        plot_zscore_loss$x,
-        plot_zscore_loss$y,
-        cex = input$pointSize/100,
-        pch = 16,
-        col = "orange"
-      )
-    })
-### Histograms ----
-    output$angle_loss_hist = renderPlot({ 
-      angle = seq(from = round(min(linear_image_clean$angleCBS)),
-                  to = round(max(linear_image_clean$angleCBS))+1,
-                  length.out = 20)
-      percent_cells = vector()
-      for(i in 1:20){
-        tmp = subset(linear_image_clean, angleCBS < angle[i])
-        percent_cells[i] = (nrow(tmp)/nrow(linear_image_clean))*100
-      }
-      for_plot_hist = as.data.frame(cbind(angle, percent_cells))
-      plot(x = for_plot_hist$angle, y = for_plot_hist$percent_cells,
-           xlab = "Projection angle", ylab = "Percent of cells",
-           main = "Cumulative histogram \nof projection angles")
+        plot(
+          linear_image_clean$x,
+          linear_image_clean$y,
+          cex = input$pointSize/100,
+          pch = 16,
+          ylab = "CODEX coordinate y",
+          xlab = "CODEX coordinate x",
+          main = title_angle_loss,
+          col.main = "red"
+        )
+        points(
+          plot_angle_loss$x,
+          plot_angle_loss$y,
+          cex = input$pointSize/100,
+          pch = 16,
+          col = "red"
+        )
       })
-    output$zscore_loss_hist = renderPlot({ 
-      z_score = seq(from = round(min(linear_image_clean$zscore, na.rm = T)),
-                    to = round(max(linear_image_clean$zscore, na.rm = T))+1,
+      output$zscore_loss = renderPlot({
+        plot_zscore_loss = subset(linear_image_clean, zscore > input$selectZscore )
+        title_zscore_loss = paste(nrow(plot_zscore_loss),
+                                  "out of",
+                                  nrow(linear_image_clean),
+                                  "cells are removed \ndue to Z-score filtering")
+        plot(
+          linear_image_clean$x,
+          linear_image_clean$y,
+          cex = input$pointSize/100,
+          pch = 16,
+          ylab = "CODEX coordinate y",
+          xlab = "CODEX coordinate x",
+          main = title_zscore_loss,
+          col.main = "orange"
+        )
+        points(
+          plot_zscore_loss$x,
+          plot_zscore_loss$y,
+          cex = input$pointSize/100,
+          pch = 16,
+          col = "orange"
+        )
+      })
+      ### Histograms ----
+      output$angle_loss_hist = renderPlot({ 
+        angle = seq(from = round(min(linear_image_clean$angleCBS)),
+                    to = round(max(linear_image_clean$angleCBS))+1,
                     length.out = 20)
-      percent_cells = vector()
-      for (i in 1:20) {
-        tmp = subset(linear_image_clean, zscore < z_score[i])
-        percent_cells[i] = (nrow(tmp)/nrow(linear_image_clean))*100
-      }
-      for_plot_hist = as.data.frame(cbind(z_score, percent_cells))
-      plot(x = for_plot_hist$z_score, y = for_plot_hist$percent_cells,
-           xlab = "Z-score", ylab = "Percent of cells",
-           main = "Cumulative histogram \nof Z-score")
-    })
-### plot linear structure ----
-  output$line_plot <- renderPlot({
-    ### 
-    plot_linear <- subset(linear_image_clean, angleCBS <= input$selectAngle &
-                                             zscore <= input$selectZscore)
-    plot(
-         plot_linear$shortest_path_length,
-         plot_linear$nn_dist,
-         cex = input$pointSize/100,
-         pch = 16,
-         col = "black",
-         ylab = "Thickness (Serosa-luminal axis)",
-         xlab = "Length (Proximal/outer-distal/inner axis)",
-         main = "Linear structure of input image"
-         )
-    })
-## Overlay markers ----
-    output$marker_plot <- renderPlot({
-      ### 
-      plot_linear <- subset(linear_image_clean, angleCBS <= input$selectAngle &
-                             zscore <= input$selectZscore )
-      marker_overlay = merge(plot_linear, input_image, by = "pos",
-          no.dups = T, suffixes = c("","1"))
-
-      selected_marker = input$selectMarker
-      marker_overlay = marker_overlay[,c("x","y","z","pos","shortest_path_length","nn_dist",selected_marker)]
-      marker_overlay[, selected_marker] = scale_marker(marker_overlay[, selected_marker])
-      ## overlay large values on top
-      marker_overlay = marker_overlay[order(marker_overlay[, selected_marker],decreasing = FALSE),]
-      min_scale = min(marker_overlay[, selected_marker])
-      median_scale = median(marker_overlay[, selected_marker])
-      max_scale = max(marker_overlay[, selected_marker])
-      ggplot(NULL) +
-        geom_point(data = marker_overlay, aes(
-          x = shortest_path_length,
-          y = nn_dist,
-          color = eval(parse(text = selected_marker))),
-          size = input$pointSize/100
-        ) +
-        labs(color = selected_marker) +
-
-        scale_colour_gradientn(colors = c("#e6e6e6",
-                                          "#e60000",
-                                          "#e60000",
-                                          "#e60000", 
-                                          "#e60000"),
-                               breaks = c(0,
-                                          0.5,
-                                          1)
-        ) +
-        ylab("Thickness (Serosa-luminal axis)") + 
-        xlab("Length (Proximal/outer-distal/inner axis)") +
-        labs(title = paste0("Digitally unrolled for ", selected_marker," marker")) +
-        theme(plot.title = element_text(hjust = 0.5)) +
-        theme(
-          axis.line = element_line(color = 'black'),
-          panel.background = element_rect(fill = 'white', color = 'black'),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          panel.border = element_blank()
+        percent_cells = vector()
+        for(i in 1:20){
+          tmp = subset(linear_image_clean, angleCBS < angle[i])
+          percent_cells[i] = (nrow(tmp)/nrow(linear_image_clean))*100
+        }
+        for_plot_hist = as.data.frame(cbind(angle, percent_cells))
+        plot(x = for_plot_hist$angle, y = for_plot_hist$percent_cells,
+             xlab = "Projection angle", ylab = "Percent of cells",
+             main = "Cumulative histogram \nof projection angles")
+      })
+      output$zscore_loss_hist = renderPlot({ 
+        z_score = seq(from = round(min(linear_image_clean$zscore, na.rm = T)),
+                      to = round(max(linear_image_clean$zscore, na.rm = T))+1,
+                      length.out = 20)
+        percent_cells = vector()
+        for (i in 1:20) {
+          tmp = subset(linear_image_clean, zscore < z_score[i])
+          percent_cells[i] = (nrow(tmp)/nrow(linear_image_clean))*100
+        }
+        for_plot_hist = as.data.frame(cbind(z_score, percent_cells))
+        plot(x = for_plot_hist$z_score, y = for_plot_hist$percent_cells,
+             xlab = "Z-score", ylab = "Percent of cells",
+             main = "Cumulative histogram \nof Z-score")
+      })
+      ### plot linear structure ----
+      output$line_plot <- renderPlot({
+        ### 
+        plot_linear <- subset(linear_image_clean, angleCBS <= input$selectAngle &
+                                zscore <= input$selectZscore)
+        plot(
+          plot_linear$shortest_path_length,
+          plot_linear$nn_dist,
+          cex = input$pointSize/100,
+          pch = 16,
+          col = "black",
+          ylab = "Thickness (Serosa-luminal axis)",
+          xlab = "Length (Proximal/outer-distal/inner axis)",
+          main = "Linear structure of input image"
         )
-    })
-    output$downloadStretch <- downloadHandler(
-      filename = function() {
-        paste(
-          "IntestLine-",
-          "linear_structure",
-          "_",
-          #chosen_angle,
-          #"_degree_angle-",
-          format(Sys.time(), "%d-%b-%Y_%Hh%Mmin"),
-          ".csv",
-          sep = ""
-        )
-      },
-      content = function(file) {
-        write.table(x = download_data,
-                    file,
-                    sep = ",",
-                    row.names = FALSE)
-      }
-    )},
-ignoreInit = TRUE,
-priority = -1)
+      })
+      ## Overlay markers ----
+      output$marker_plot <- renderPlot({
+        ### 
+        plot_linear <- subset(linear_image_clean, angleCBS <= input$selectAngle &
+                                zscore <= input$selectZscore )
+        marker_overlay = merge(plot_linear, input_image, by = "pos",
+                               no.dups = T, suffixes = c("","1"))
+        
+        selected_marker = input$selectMarker
+        marker_overlay = marker_overlay[,c("x","y","z","pos","shortest_path_length","nn_dist",selected_marker)]
+        marker_overlay[, selected_marker] = scale_marker(marker_overlay[, selected_marker])
+        ## overlay large values on top
+        marker_overlay = marker_overlay[order(marker_overlay[, selected_marker],decreasing = FALSE),]
+        min_scale = min(marker_overlay[, selected_marker])
+        median_scale = median(marker_overlay[, selected_marker])
+        max_scale = max(marker_overlay[, selected_marker])
+        ggplot(NULL) +
+          geom_point(data = marker_overlay, aes(
+            x = shortest_path_length,
+            y = nn_dist,
+            color = eval(parse(text = selected_marker))),
+            size = input$pointSize/100
+          ) +
+          labs(color = selected_marker) +
+          
+          scale_colour_gradientn(colors = c("#e6e6e6",
+                                            "#e60000",
+                                            "#e60000",
+                                            "#e60000", 
+                                            "#e60000"),
+                                 breaks = c(0,
+                                            0.5,
+                                            1)
+          ) +
+          ylab("Thickness (Serosa-luminal axis)") + 
+          xlab("Length (Proximal/outer-distal/inner axis)") +
+          labs(title = paste0("Digitally unrolled for ", selected_marker," marker")) +
+          theme(plot.title = element_text(hjust = 0.5)) +
+          theme(
+            axis.line = element_line(color = 'black'),
+            panel.background = element_rect(fill = 'white', color = 'black'),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.border = element_blank()
+          )
+      })
+      output$downloadStretch <- downloadHandler(
+        filename = function() {
+          paste(
+            "IntestLine-",
+            "linear_structure",
+            "_",
+            #chosen_angle,
+            #"_degree_angle-",
+            format(Sys.time(), "%d-%b-%Y_%Hh%Mmin"),
+            ".csv",
+            sep = ""
+          )
+        },
+        content = function(file) {
+          write.table(x = download_data,
+                      file,
+                      sep = ",",
+                      row.names = FALSE)
+        }
+      )},
+      ignoreInit = TRUE,
+      priority = -1)
   })
 })
 
