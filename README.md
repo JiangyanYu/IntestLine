@@ -6,15 +6,12 @@ IntestLine is developed to convert intestine images prepared by Swiss-roll techn
 # User manual
 Option 1: Use IntestLine via docker\
 
-Option 2: Use IntestLine application implemented in FASTGenomics\
-[Step 1: Upload data](#3-.-1-Upload-data)\
-[Step 2: Select backbone points](#3-2-Select-backbone-points)\
-[Step 3: Unroll](#3-3-Unroll)\
-[Step 4: Overlay parameters on the linear structure](#3-3-5-Overlay-parameters-on-the-linear-structure)
+[Option 2: Use IntestLine application implemented in FASTGenomics](#option2-fastgenomics)\
 
 Option 3: Use IntestLine locally\
 
-# 3.1: Upload data (Upper left panel in grey)
+# Option2: FASTGenomics
+# 2.1: Upload data (Upper left panel in grey)
 1.1 Go to website https://beta.fastgenomics.org/a/intestline To use the application, unfortunately you need to login with an account. You can register a your own account, but to test the application you can also use our IntestLine account (Username: intestline@gmail.com Password: intestline).\
 1.2 Upload CODEX-exported .csv file, containing x and y coordinates.\
 1.3 If available, you can upload previously created backbone file.\
