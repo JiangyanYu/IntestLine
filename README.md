@@ -6,7 +6,8 @@ IntestLine is developed to convert intestine images prepared by Swiss-roll techn
 # User manual
 Option 1: Use IntestLine via docker\
 
-[Option 2: Use IntestLine application implemented in FASTGenomics](#option2-fastgenomics)\
+[Option 2: Use IntestLine application implemented in FASTGenomics](#option2-fastgenomics)
+A quick way to try IntestLine. Be aware that the configureation of the server is very limited (). therefore it will take a while to unroll a large dataset.
 
 Option 3: Use IntestLine locally\
 
