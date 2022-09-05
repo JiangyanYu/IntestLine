@@ -752,8 +752,7 @@ server = shinyServer(function(input, output, session) {
         title_angle_loss = paste(nrow(plot_angle_loss),
                                  "out of",
                                  nrow(linear_image_clean),
-                                 "cells are removed \ndue to 
-                               projection angle filtering")
+                                 "cells are removed \ndue to projection angle filtering")
         plot(
           linear_image_clean$x,
           linear_image_clean$y,
