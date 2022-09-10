@@ -26,7 +26,7 @@ order_base = function(backbone_points){
 project_points2base = function(backbone_points,query_points){
   base_points = backbone_points
   query_points = query_points[,c("x","y","z","distance2center","pos")]
-
+  
   output = query_points[,c("x","y","z","distance2center","pos")]
   output$nn_index = 0
   output$nn_dist = 0
@@ -37,7 +37,7 @@ project_points2base = function(backbone_points,query_points){
   output$note = "NA"
   
   for(i in c(1:nrow(query_points))){
-
+    
     if(query_points[i,"pos"] %in% base_points$pos){
       output[i,"nn_index"] = -3
       output[i,"nn_dist"] = -3
@@ -87,7 +87,7 @@ project_points2base = function(backbone_points,query_points){
 # calculate upper outlier per backbone point
 zscore_per_backbone_point = function(converted_image,backbone_points){
   converted_image = converted_image
-
+  
   backbone_points = backbone_points
   backbone_points$thickness_mean = 0
   backbone_points$thickness_sd = 0
@@ -120,7 +120,7 @@ qc_angle_outlier = function(converted_image,x0,y0,backbone_points){
   converted_image = converted_image
   converted_image$angleCBS = 0
   converted_image$zscore = 0
-
+  
   for(i in 1:nrow(converted_image)){
     
     
@@ -154,7 +154,40 @@ qc_angle_outlier = function(converted_image,x0,y0,backbone_points){
     }
     
   }
+  
+  return(converted_image)
+  
+}
 
+qc_zscore_outlier = function(converted_image,x0,y0,backbone_points){
+  x0 = x0
+  y0 = y0
+  
+  converted_image = converted_image
+  converted_image$zscore = 0
+  
+  for(i in 1:nrow(converted_image)){
+    
+    
+    if(converted_image[i,"note"] != "Successfully projected"){
+      converted_image[i,"zscore"] = "Projection failed"
+    }else{
+      
+      ## outlier
+      outlier_value = subset(backbone_points,x == converted_image[i,"nearest_Row"] & y == converted_image[i,"nearest_Column"])
+      # print(outlier_value)
+      
+      if(outlier_value[1,"thickness_sd"] == 0){
+        converted_image[i,"zscore"] = 0
+      }else{
+        converted_image[i,"zscore"] = (converted_image[i,"nn_dist"]-outlier_value[1,"thickness_mean"])/outlier_value[1,"thickness_sd"]
+      }
+      
+      
+    }
+    
+  }
+  
   return(converted_image)
   
 }
