@@ -293,8 +293,8 @@ ui = shinyUI(fluidPage(
            fluidRow(
              column( width = 6,
                      numericInput(
-                       "selectAngle",
-                       "Angle treshold (Upload Data! To remove points behind backbone.):",
+                       "selectDistance",
+                       "Distance treshold (Upload Data! To remove points behind backbone.):",
                        value = Inf,
                      )
              ),
@@ -309,11 +309,11 @@ ui = shinyUI(fluidPage(
            fluidRow(
              column(
                width = 3,
-               plotOutput("angle_loss_hist")
+               plotOutput("distance_loss_hist")
              ),
              column(
                width = 3,
-               plotOutput("angle_loss")
+               plotOutput("distance_loss")
              ),
              # ),
              # p(),
@@ -431,13 +431,13 @@ server = shinyServer(function(input, output, session) {
     output$backbonePlot = renderPlot({
       plot.new()
     })
-    output$angle_loss = renderPlot({
+    output$distance_loss = renderPlot({
       plot.new()
     })
     output$zscore_loss = renderPlot({
       plot.new()
     })
-    output$angle_loss_hist = renderPlot({
+    output$distance_loss_hist = renderPlot({
       plot.new()
     })
     output$zscore_loss_hist = renderPlot({
@@ -515,13 +515,13 @@ server = shinyServer(function(input, output, session) {
     output$backbonePlotButton <- renderPlot({
       plot.new()
     })
-    output$angle_loss = renderPlot({
+    output$distance_loss = renderPlot({
       plot.new()
     })
     output$zscore_loss = renderPlot({
       plot.new()
     })
-    output$angle_loss_hist = renderPlot({
+    output$distance_loss_hist = renderPlot({
       plot.new()
     })
     output$zscore_loss_hist = renderPlot({
@@ -695,15 +695,16 @@ server = shinyServer(function(input, output, session) {
       input_image = subset(input_image, distance2center < 1)
       linear_image = project_points2base(backbone_points = ordered_base, query_points = input_image)
       
-      ### Filtering steps  (angle plus outlier)
+      ### Filtering steps  (distance plus outlier)
       ordered_base = zscore_per_backbone_point(converted_image = linear_image,backbone_points = ordered_base)
-      linear_image = qc_angle_outlier(converted_image = linear_image,x0=x0,y0=y0,backbone_points = ordered_base)
+      linear_image = qc_zscore_outlier(converted_image = linear_image,x0=x0,y0=y0,backbone_points = ordered_base)
       ##############################
       ##
       #
       # We need to add "readr" package in install.R file for the FG Docker 
       linear_image_clean = subset(linear_image,note=="Successfully projected" )
-      linear_image_clean$angleCBS = parse_number(linear_image_clean$angleCBS)
+      #linear_image_clean$nn_dist = parse_number(linear_image_clean$nn_dist)
+
       linear_image_clean$zscore = parse_number(linear_image_clean$zscore)
       
       download_data = merge(linear_image, input_image, by = "pos", no.dups = T, suffixes = c("","1"))
@@ -712,15 +713,15 @@ server = shinyServer(function(input, output, session) {
       download_data = rename(download_data, Thickness = nn_dist, Length = shortest_path_length)
       write.csv(download_data,"linear_image_clean.csv", row.names = F)
       updateNumericInput(session,
-                         inputId = "selectAngle", 
-                         label = paste0("Select projection angle to filter (",
-                                        round(min(linear_image_clean$angleCBS)),
+                         inputId = "selectDistance", 
+                         label = paste0("Select distance filter (",
+                                        round(min(linear_image_clean$nn_dist)),
                                         " to ",
-                                        round(max(linear_image_clean$angleCBS))+1,
+                                        round(max(linear_image_clean$nn_dist))+1,
                                         ")"),
-                         min = round(min(linear_image_clean$angleCBS)),
-                         max = round(max(linear_image_clean$angleCBS))+1,
-                         value = round(0.75*max(linear_image_clean$angleCBS))
+                         min = round(min(linear_image_clean$nn_dist)),
+                         max = round(max(linear_image_clean$nn_dist))+1,
+                         value = round(0.75*max(linear_image_clean$nn_dist))
       )
       
       updateNumericInput(session,
@@ -738,7 +739,7 @@ server = shinyServer(function(input, output, session) {
       wrong_names = c("pos", "x", "y", "z", "distance2center", "nn_index",
                       "nn_dist", "nearest_Row", "nearest_Column",
                       "shortest_path_order", "shortest_path_length", "note",
-                      "angleCBS", "zscore", "V1", "cell_id", "region",
+                      "nn_dist", "zscore", "V1", "cell_id", "region",
                       "tile_num", "x1", "y1", "z1", "x_tile", "y_tile","size",
                       "tsne_x", "tsne_y", "homogeneity", "distance2center1")
       names <- all_names[! all_names %in% wrong_names]
@@ -747,12 +748,12 @@ server = shinyServer(function(input, output, session) {
                            choices = names,
                            selected = names[1],
                            server = TRUE)
-      output$angle_loss = renderPlot({
-        plot_angle_loss = subset(linear_image_clean, angleCBS > input$selectAngle )
-        title_angle_loss = paste(nrow(plot_angle_loss),
+      output$distance_loss = renderPlot({
+        plot_distance_loss = subset(linear_image_clean, nn_dist > input$selectDistance )
+        title_distance_loss = paste(nrow(plot_distance_loss),
                                  "out of",
                                  nrow(linear_image_clean),
-                                 "cells are removed \ndue to projection angle filtering")
+                                 "cells are removed \ndue to projection distance filtering")
         plot(
           linear_image_clean$x,
           linear_image_clean$y,
@@ -760,12 +761,12 @@ server = shinyServer(function(input, output, session) {
           pch = 16,
           ylab = "CODEX coordinate y",
           xlab = "CODEX coordinate x",
-          main = title_angle_loss,
+          main = title_distance_loss,
           col.main = "red"
         )
         points(
-          plot_angle_loss$x,
-          plot_angle_loss$y,
+          plot_distance_loss$x,
+          plot_distance_loss$y,
           cex = input$pointSize/100,
           pch = 16,
           col = "red"
@@ -796,20 +797,40 @@ server = shinyServer(function(input, output, session) {
         )
       })
       ### Histograms ----
-      output$angle_loss_hist = renderPlot({ 
-        angle = seq(from = round(min(linear_image_clean$angleCBS)),
-                    to = round(max(linear_image_clean$angleCBS))+1,
-                    length.out = 20)
-        percent_cells = vector()
-        for(i in 1:20){
-          tmp = subset(linear_image_clean, angleCBS < angle[i])
-          percent_cells[i] = (nrow(tmp)/nrow(linear_image_clean))*100
-        }
-        for_plot_hist = as.data.frame(cbind(angle, percent_cells))
-        plot(x = for_plot_hist$angle, y = for_plot_hist$percent_cells,
-             xlab = "Projection angle", ylab = "Percent of cells",
-             main = "Cumulative histogram \nof projection angles")
+      # output$distance_loss_hist = renderPlot({ 
+      #   distance = seq(from = round(min(linear_image_clean$nn_dist)),
+      #               to = round(max(linear_image_clean$nn_dist))+1,
+      #               length.out = 20)
+      #   percent_cells = vector()
+      #   for(i in 1:20){
+      #     tmp = subset(linear_image_clean, nn_dist < distance[i])
+      #     percent_cells[i] = (nrow(tmp)/nrow(linear_image_clean))*100
+      #   }
+      #   for_plot_hist = as.data.frame(cbind(distance, percent_cells))
+      #   plot(x = for_plot_hist$distance, y = for_plot_hist$percent_cells,
+      #        xlab = "Projection distance", ylab = "Percent of cells",
+      #        main = "Cumulative histogram \nof projection distances")
+      # })
+      
+      output$distance_loss_hist = renderPlot({ 
+        plot_distance_loss = subset(linear_image_clean, nn_dist > input$selectDistance )
+        
+        plot(x = linear_image_clean$shortest_path_order,
+             y = linear_image_clean$nn_dist,
+             cex = input$pointSize/100,
+             pch = 16,
+             xlab = "Length", 
+             ylab = "Distance",
+             main = "Mis-projected points")
+        points(
+          x = plot_distance_loss$shortest_path_order,
+          y = plot_distance_loss$nn_dist,
+          cex = input$pointSize/100,
+          pch = 16,
+          col = "red"
+        )
       })
+      
       output$zscore_loss_hist = renderPlot({ 
         z_score = seq(from = round(min(linear_image_clean$zscore, na.rm = T)),
                       to = round(max(linear_image_clean$zscore, na.rm = T))+1,
@@ -827,7 +848,7 @@ server = shinyServer(function(input, output, session) {
       ### plot linear structure ----
       output$line_plot <- renderPlot({
         ### 
-        plot_linear <- subset(linear_image_clean, angleCBS <= input$selectAngle &
+        plot_linear <- subset(linear_image_clean, nn_dist <= input$selectDistance &
                                 zscore <= input$selectZscore)
         plot(
           plot_linear$shortest_path_length,
@@ -843,7 +864,7 @@ server = shinyServer(function(input, output, session) {
       ## Overlay markers ----
       output$marker_plot <- renderPlot({
         ### 
-        plot_linear <- subset(linear_image_clean, angleCBS <= input$selectAngle &
+        plot_linear <- subset(linear_image_clean, nn_dist <= input$selectDistance &
                                 zscore <= input$selectZscore )
         marker_overlay = merge(plot_linear, input_image, by = "pos",
                                no.dups = T, suffixes = c("","1"))
@@ -892,8 +913,8 @@ server = shinyServer(function(input, output, session) {
             "IntestLine-",
             "linear_structure",
             "_",
-            #chosen_angle,
-            #"_degree_angle-",
+            #chosen_distance,
+            #"_degree_distance-",
             format(Sys.time(), "%d-%b-%Y_%Hh%Mmin"),
             ".csv",
             sep = ""
