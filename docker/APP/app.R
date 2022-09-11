@@ -721,7 +721,7 @@ server = shinyServer(function(input, output, session) {
                                         ")"),
                          min = round(min(linear_image_clean$nn_dist)),
                          max = round(max(linear_image_clean$nn_dist))+1,
-                         value = round(0.75*max(linear_image_clean$nn_dist))
+                         value = round(0.30*max(linear_image_clean$nn_dist))
       )
       
       updateNumericInput(session,
