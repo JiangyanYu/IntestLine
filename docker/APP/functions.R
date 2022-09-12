@@ -110,55 +110,6 @@ zscore_per_backbone_point = function(converted_image,backbone_points){
   return(backbone_points)
 }
 
-
-
-# filtering by angle
-qc_angle_outlier = function(converted_image,x0,y0,backbone_points){
-  x0 = x0
-  y0 = y0
-  
-  converted_image = converted_image
-  converted_image$angleCBS = 0
-  converted_image$zscore = 0
-  
-  for(i in 1:nrow(converted_image)){
-    
-    
-    if(converted_image[i,"note"] != "Successfully projected"){
-      converted_image[i,"angleCBS"] = "Projection failed"
-      converted_image[i,"zscore"] = "Projection failed"
-    }else{
-      ## angle
-      A=c(x0,y0)
-      B=c(converted_image$nearest_Row[i],converted_image$nearest_Column[i])
-      C=c(converted_image$x[i],converted_image$y[i])
-      vector1 = c(A[1] - B[1], A[2] - B[2])
-      vector2 = c(C[1] - B[1], C[2] - B[2])
-      num = (vector1[1] * vector2[1] + vector1[2] * vector2[2])
-      den = sqrt(vector1[1]^2 + vector1[2]^2) * sqrt(vector2[1]^2 + vector2[2]^2)
-      angle = acos(num/den)
-      angle = (360 * angle)/(2 * pi)
-      converted_image[i,"angleCBS"] = angle
-      
-      ## outlier
-      outlier_value = subset(backbone_points,x == converted_image[i,"nearest_Row"] & y == converted_image[i,"nearest_Column"])
-      # print(outlier_value)
-      
-      if(outlier_value[1,"thickness_sd"] == 0){
-        converted_image[i,"zscore"] = 0
-      }else{
-        converted_image[i,"zscore"] = (converted_image[i,"nn_dist"]-outlier_value[1,"thickness_mean"])/outlier_value[1,"thickness_sd"]
-      }
-      
-      
-    }
-    
-  }
-  
-  return(converted_image)
-  
-}
-
 qc_zscore_outlier = function(converted_image,x0,y0,backbone_points){
   x0 = x0
   y0 = y0
@@ -173,10 +124,8 @@ qc_zscore_outlier = function(converted_image,x0,y0,backbone_points){
       converted_image[i,"zscore"] = "Projection failed"
     }else{
       
-      ## outlier
       outlier_value = subset(backbone_points,x == converted_image[i,"nearest_Row"] & y == converted_image[i,"nearest_Column"])
-      # print(outlier_value)
-      
+
       if(outlier_value[1,"thickness_sd"] == 0){
         converted_image[i,"zscore"] = 0
       }else{
