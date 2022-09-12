@@ -111,12 +111,12 @@ ui = shinyUI(fluidPage(
                fluidRow(
                  column( width = 3,
                          offset = 1,
-                         actionButton(
+                     div(id = "uploadData",  actionButton(
                            "uploadData",
                            "1. Upload Data",
                            icon = icon("upload"),
                            style = "background:#d279a6;color:white;"
-                         )
+                         ))
                  ),
                  column(
                    width = 6,
@@ -130,6 +130,7 @@ ui = shinyUI(fluidPage(
                    )
                  )
                ),
+               tags$style(type="text/css", "button#uploadData { margin-top:25px;}"),
                fluidRow(
                  plotOutput("plotOverview",
                             height = "655px",
@@ -344,18 +345,19 @@ ui = shinyUI(fluidPage(
            fluidRow(column(
              width = 2,
              offset = 2,
-             actionButton(
-               "unrollData",
+           div( id = "overlayData", actionButton(
+               "overlayData",
                "3.5. Overlay markers",
                icon = icon("layer-group"),
                style = "background:#8585ad;color:white;"
-             )
+             ))
            ),
            column( width = 4,
                    offset = 2,
                    selectizeInput("selectMarker", "Choose marker:", choices = "Upload Data!")
            )
            ),
+           tags$style(type="text/css", "button#overlayData{ margin-top:25px;}"),
            fluidRow(
              column(width = 12,
                     plotOutput("marker_plot",
@@ -748,30 +750,43 @@ server = shinyServer(function(input, output, session) {
                            choices = names,
                            selected = names[1],
                            server = TRUE)
-      output$distance_loss = renderPlot({
+      
+      output$distance_loss = renderPlot({ 
         plot_distance_loss = subset(linear_image_clean, nn_dist > input$selectDistance )
         title_distance_loss = paste(nrow(plot_distance_loss),
-                                 "out of",
-                                 nrow(linear_image_clean),
-                                 "cells are removed \ndue to projection distance filtering")
-        plot(
-          linear_image_clean$x,
-          linear_image_clean$y,
-          cex = input$pointSize/100,
-          pch = 16,
-          ylab = "CODEX coordinate y",
-          xlab = "CODEX coordinate x",
-          main = title_distance_loss,
-          col.main = "red"
-        )
-        points(
-          plot_distance_loss$x,
-          plot_distance_loss$y,
-          cex = input$pointSize/100,
-          pch = 16,
-          col = "red"
-        )
+                                  "out of",
+                                  nrow(linear_image_clean),
+                                  "cells are removed \ndue to distance filtering")
+        plot(x = ordered_base$x,
+             y = ordered_base$y,
+             cex = input$pointSize/100,
+             pch = 20,
+             #xlab = "Length", 
+             xlab = "",
+             #ylab = "Distance",
+             ylab= "",
+             main = title_distance_loss,
+             col.main = "green"
+             )
+        for(i in c(1:nrow(linear_image_clean))){
+          segments(x0=linear_image_clean[i,"x"],
+                   y0=linear_image_clean[i,"y"],
+                   x1=linear_image_clean[i,"nearest_Row"],
+                   y1=linear_image_clean[i,"nearest_Column"],col = "grey",cex=0.1)
+        }
+        for(j in c(1:nrow(plot_distance_loss))){
+          segments(x0=plot_distance_loss[j,"x"],
+                   y0=plot_distance_loss[j,"y"],
+                   x1=plot_distance_loss[j,"nearest_Row"],
+                   y1=plot_distance_loss[j,"nearest_Column"],col = "green",cex=0.1)
+        }
+        for(k in 1:nrow(linear_image_clean)){
+         
+          points(linear_image_clean[k,"x"],linear_image_clean[k,"y"], col = "blue",pch=16,cex=0.3)
+          points(linear_image_clean[k,"nearest_Row"],linear_image_clean[k,"nearest_Column"],col = "red",pch=16,cex=0.3)
+        }
       })
+      
       output$zscore_loss = renderPlot({
         plot_zscore_loss = subset(linear_image_clean, zscore > input$selectZscore )
         title_zscore_loss = paste(nrow(plot_zscore_loss),
@@ -782,7 +797,7 @@ server = shinyServer(function(input, output, session) {
           linear_image_clean$x,
           linear_image_clean$y,
           cex = input$pointSize/100,
-          pch = 16,
+          pch = 20,
           ylab = "CODEX coordinate y",
           xlab = "CODEX coordinate x",
           main = title_zscore_loss,
@@ -797,53 +812,37 @@ server = shinyServer(function(input, output, session) {
         )
       })
       ### Histograms ----
-      # output$distance_loss_hist = renderPlot({ 
-      #   distance = seq(from = round(min(linear_image_clean$nn_dist)),
-      #               to = round(max(linear_image_clean$nn_dist))+1,
-      #               length.out = 20)
-      #   percent_cells = vector()
-      #   for(i in 1:20){
-      #     tmp = subset(linear_image_clean, nn_dist < distance[i])
-      #     percent_cells[i] = (nrow(tmp)/nrow(linear_image_clean))*100
-      #   }
-      #   for_plot_hist = as.data.frame(cbind(distance, percent_cells))
-      #   plot(x = for_plot_hist$distance, y = for_plot_hist$percent_cells,
-      #        xlab = "Projection distance", ylab = "Percent of cells",
-      #        main = "Cumulative histogram \nof projection distances")
-      # })
-      
-      output$distance_loss_hist = renderPlot({ 
-        plot_distance_loss = subset(linear_image_clean, nn_dist > input$selectDistance )
-        
-        plot(x = linear_image_clean$shortest_path_order,
-             y = linear_image_clean$nn_dist,
-             cex = input$pointSize/100,
-             pch = 16,
-             xlab = "Length", 
-             ylab = "Distance",
-             main = "Mis-projected points")
-        points(
-          x = plot_distance_loss$shortest_path_order,
-          y = plot_distance_loss$nn_dist,
-          cex = input$pointSize/100,
-          pch = 16,
-          col = "red"
-        )
+      output$distance_loss_hist = renderPlot({
+        distance = seq(from = round(min(linear_image_clean$nn_dist)),
+                    to = round(max(linear_image_clean$nn_dist))+1,
+                    length.out = 50)
+        percent_cells = vector()
+        for(i in 1:length(distance)){
+          tmp = subset(linear_image_clean, nn_dist < distance[i])
+          percent_cells[i] = (nrow(tmp)/nrow(linear_image_clean))*100
+        }
+        for_plot_hist = as.data.frame(cbind(distance, percent_cells))
+        plot(x = for_plot_hist$distance, y = for_plot_hist$percent_cells,
+             xlab = "Projection distance", ylab = "Percent of cells",
+             pch = 20,
+             main = "Fraction of cells\n under specific distance")
       })
+      
       
       output$zscore_loss_hist = renderPlot({ 
         z_score = seq(from = round(min(linear_image_clean$zscore, na.rm = T)),
                       to = round(max(linear_image_clean$zscore, na.rm = T))+1,
-                      length.out = 20)
+                      length.out = 50)
         percent_cells = vector()
-        for (i in 1:20) {
+        for (i in 1:length(z_score)) {
           tmp = subset(linear_image_clean, zscore < z_score[i])
           percent_cells[i] = (nrow(tmp)/nrow(linear_image_clean))*100
         }
         for_plot_hist = as.data.frame(cbind(z_score, percent_cells))
         plot(x = for_plot_hist$z_score, y = for_plot_hist$percent_cells,
              xlab = "Z-score", ylab = "Percent of cells",
-             main = "Cumulative histogram \nof Z-score")
+             pch = 20,
+             main = "Z-score for a group of points \nprojected to same base point")
       })
       ### plot linear structure ----
       output$line_plot <- renderPlot({
@@ -862,6 +861,7 @@ server = shinyServer(function(input, output, session) {
         )
       })
       ## Overlay markers ----
+      observeEvent(input$overlayData,{
       output$marker_plot <- renderPlot({
         ### 
         plot_linear <- subset(linear_image_clean, nn_dist <= input$selectDistance &
@@ -882,7 +882,7 @@ server = shinyServer(function(input, output, session) {
             x = shortest_path_length,
             y = nn_dist,
             color = eval(parse(text = selected_marker))),
-            size = input$pointSize/100
+            size = input$pointSize/100*3
           ) +
           labs(color = selected_marker) +
           
@@ -906,6 +906,7 @@ server = shinyServer(function(input, output, session) {
             panel.grid.minor = element_blank(),
             panel.border = element_blank()
           )
+      })
       })
       output$downloadStretch <- downloadHandler(
         filename = function() {
