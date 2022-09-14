@@ -535,7 +535,8 @@ server = shinyServer(function(input, output, session) {
     selected_backbone = selected_backbone[0, ]
     percent_cell = input$percentCells
     set.seed(GLOBAL_SEED)
-    shiny_plot = sample_n(image_ROI, size = round(percent_cell / 100 * nrow(image_ROI)))
+    shiny_plot = sample_n(image_ROI, 
+                          size = round(percent_cell / 100 * nrow(image_ROI)))
     shiny_plot$order = c(1:nrow(shiny_plot))
     selected <- reactive({
       # add clicked
@@ -588,11 +589,18 @@ server = shinyServer(function(input, output, session) {
     })
     output$plotSelectBackbone <- renderPlot({
       ggplot(shiny_plot, aes(x = x, y = y)) +
-        geom_point() +
+        geom_point(size = input$pointSize/100) +
         geom_point(data = selected(),
                    colour = "red",
                    size = 0.5) +
-        xlab("CODEX coordinate x") + ylab("CODEX coordinate y")
+        xlab("CODEX coordinate x") + ylab("CODEX coordinate y")+
+        theme(
+          axis.line = element_line(color = 'black'),
+          panel.background = element_rect(fill = 'white', color = 'black'),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          panel.border = element_blank()
+        )
     })
     ### View backbone plus image ----
     observeEvent(input$backbonePlotButton,{
