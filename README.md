@@ -4,7 +4,7 @@
 IntestLine is developed to convert intestine images prepared by Swiss-roll technique into a linear system. It is suitable to process CODEX images or 10x spatial transcriptomics images, basically any images providing xy-coordinates.
 
 # User manual
-A tutorial video is available here: https://www.youtube.com/watch?v=-QMrW_MKLPo
+Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com/watch?v=DLZ-4taQk-s](https://www.youtube.com/watch?v=DLZ-4taQk-s)
 
 Option 1: Use IntestLine via docker
 
@@ -12,8 +12,6 @@ Option 1: Use IntestLine via docker
 A quick way to try IntestLine. Be aware that the configureation of the server is very limited (). therefore it will take a while to unroll a large dataset.
 
 Option 3: Use IntestLine locally
-
-Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com/watch?v=DLZ-4taQk-s](https://www.youtube.com/watch?v=DLZ-4taQk-s)
 
 # Option2: FASTGenomics
 Step 1: Upload data (Upper left panel in grey)\
