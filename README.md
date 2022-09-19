@@ -7,12 +7,13 @@ IntestLine is developed to map images of intestinal tissues prepared by Swiss-ro
 Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com/watch?v=DLZ-4taQk-s](https://www.youtube.com/watch?v=DLZ-4taQk-s)
 
 [Option 1: Use IntestLine via docker](#option1-docker)\
+
 [Option 2: Use IntestLine application implemented in FASTGenomics](#option2-fastgenomics)\
 A quick way to try IntestLine. Be aware that the configureation of the server is very limited (). therefore it will take a while to unroll a large dataset.
-Option 3: Use IntestLine locally
+
+[Option 3: Use IntestLine locally](#option2-local-machine)\
 
 # Option1: Docker
-
 1. Pull the docker image to your system
   ```
   docker pull altayyuzeir/intestline
@@ -52,6 +53,7 @@ Step 4: Overlay parameters on the linear structure\
 4.1 You can overlay expressed markers over the stretched image.\
 4.2 This can be used to examine marker expression along the length and thickness of the organ.
 
+#Option3: Local machine
 # Cite us
 
 This package is aiming to unroll intestinal images from CODEX.\
