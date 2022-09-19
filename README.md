@@ -61,8 +61,5 @@ Step 4: Overlay parameters on the linear structure\
 
 # Cite us
 
-This package is aiming to unroll intestinal images from CODEX.\
-This script is inspired by Parigi et al (https://www.nature.com/articles/s41467-022-28497-0). \
-The method is implemented in a shiny-based web application: https://beta.fastgenomics.org/a/intestline
 
 
