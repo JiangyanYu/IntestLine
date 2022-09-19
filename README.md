@@ -9,7 +9,7 @@ Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com
 [Option 1: Use IntestLine via docker](#option1-docker)
 
 [Option 2: Use IntestLine application implemented in FASTGenomics](#option2-fastgenomics)
-A quick way to try IntestLine. Be aware that the configureation of the server is very limited (). therefore it will take a while to unroll a large dataset.
+A quick way to try IntestLine. Be aware that the configureation of the server is very limited (2 vCPUs @2.1GHz, 16 GB RAM). Therefore it will take a while to unroll a large dataset.
 
 [Option 3: Use IntestLine locally (Advanced users)](#option3-local-machine)
 
