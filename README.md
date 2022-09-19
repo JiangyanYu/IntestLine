@@ -9,7 +9,9 @@ Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com
 Option 1: Use IntestLine via docker
 1. Pull the docker image to your system
 '''
-  docker pull altayyuzeir/intestline
+
+docker pull altayyuzeir/intestline
+  
 '''
 3. Open command terminal
 4. cd C:\Users\altay\Altay\Lectures_Biochemustry\5_Lab_rotation_2\ - set desired work folder with cd command
