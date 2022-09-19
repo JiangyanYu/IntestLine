@@ -1,12 +1,25 @@
 <img src="IntestLine-Logo.png" align="right" width=120 height=139 alt="" />
 
 # IntestLine 
-IntestLine is developed to convert intestine images prepared by Swiss-roll technique into a linear system. It is suitable to process CODEX images or 10x spatial transcriptomics images, basically any images providing xy-coordinates.
+IntestLine is developed to map images of intestinal tissues prepared by Swiss-roll technique onto a line. It is suitable to process CODEX images or 10x spatial transcriptomics images, basically any images providing xy-coordinates.
 
 # User manual
 Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com/watch?v=DLZ-4taQk-s](https://www.youtube.com/watch?v=DLZ-4taQk-s)
 
 Option 1: Use IntestLine via docker
+1. Pull the docker image to your system
+'''
+  docker pull altayyuzeir/intestline
+'''
+3. Open command terminal
+4. cd C:\Users\altay\Altay\Lectures_Biochemustry\5_Lab_rotation_2\ - set desired work folder with cd command
+5. docker pull altayyuzeir/intestline - to pull the image
+6. docker run --name IntestLine -it -p 3838:3838 altayyuzeir/lab-rotation-2:fg-v0.60 bash - start the application
+7. /usr/bin/run-shiny.sh shiny - this command opens the shiny app
+8. visit: http://localhost:3838/proxy/shiny on the default browser
+9. do your analysis
+10. Ctrl+C in command terminal to close shiny app
+11. exit - command to close the application
 
 [Option 2: Use IntestLine application implemented in FASTGenomics](#option2-fastgenomics)\
 A quick way to try IntestLine. Be aware that the configureation of the server is very limited (). therefore it will take a while to unroll a large dataset.
