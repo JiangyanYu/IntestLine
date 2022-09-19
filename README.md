@@ -8,20 +8,20 @@ Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com
 
 Option 1: Use IntestLine via docker
 1. Pull the docker image to your system
-
   ```
   docker pull altayyuzeir/intestline
   ```
-  
-3. Open command terminal
-4. cd C:\Users\altay\Altay\Lectures_Biochemustry\5_Lab_rotation_2\ - set desired work folder with cd command
-5. docker pull altayyuzeir/intestline - to pull the image
-6. docker run --name IntestLine -it -p 3838:3838 altayyuzeir/lab-rotation-2:fg-v0.60 bash - start the application
-7. /usr/bin/run-shiny.sh shiny - this command opens the shiny app
-8. visit: http://localhost:3838/proxy/shiny on the default browser
-9. do your analysis
-10. Ctrl+C in command terminal to close shiny app
-11. exit - command to close the application
+2. Start the application
+  ```
+  docker run --name IntestLine -it -p 3838:3838 altayyuzeir/intestline bash
+  ```
+3. Once getting into the terminal, open the shiny app
+  ```
+  /usr/bin/run-shiny.sh shiny
+  ```
+4. Go to your web broswer and visit the port: http://localhost:3838/proxy/shiny
+5. Do your analysis according to the steps described in option 3 below.
+6. Ctrl+C in command terminal to close shiny app. exit - command to close the application
 
 [Option 2: Use IntestLine application implemented in FASTGenomics](#option2-fastgenomics)\
 A quick way to try IntestLine. Be aware that the configureation of the server is very limited (). therefore it will take a while to unroll a large dataset.
