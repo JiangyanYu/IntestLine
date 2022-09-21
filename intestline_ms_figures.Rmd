@@ -1,0 +1,209 @@
+---
+title: "Generating figures for intestline manuscript"
+author: "Jiangyan Yu (jiangyan.yu@uni-bonn.de)"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    code_folding: hide
+    number_sections: yes
+    theme: united
+    toc: yes
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+
+# library and directory
+
+```{r}
+rm(list=ls())
+library(dplyr)
+library(magrittr)
+library(ggplot2)
+
+## set working directory
+working_dir = "/home/yu.j/sciebo/Projects/CODEX_ownerJY//"
+figure_dir = paste0(working_dir,"/ms_figures")
+
+## 
+intestline = read.csv(file = paste0(working_dir,"/CODEX_data/IntestLine-linear_structure_15-Sep-2022_09h27min.csv"))
+base_layer = read.csv(file = paste0(working_dir,"/CODEX_data/better_backbone.csv"))
+```
+
+# fig2
+
+## fig2b_selected_base_layer
+
+```{r}
+pdf(file = paste0(figure_dir,"/V2fig2b_selected_base_layer.pdf"),width = 8,height = 8)
+
+plot(intestline$x,intestline$y,pch=16,cex=0.2,col="black")
+points(base_layer$x,base_layer$y,pch=16,cex=0.5,col="red")
+
+dev.off()
+```
+
+## fig2c_connect_spot_n_baselayer_after_filtering
+
+```{r}
+pdf(file = paste0(figure_dir,"/V2fig2c_connect_spot_n_baselayer_before_filtering.pdf"),width = 8,height = 8)
+
+## select successfully projected spots
+plot_data = subset(intestline,note == "Successfully projected")
+
+plot(plot_data$x,plot_data$y,pch=16,cex=0)
+segments(x0=plot_data$x,y0=plot_data$y,x1 = plot_data$nearest_Row, y1=plot_data$nearest_Column,pch=16,cex=0.1,lwd=0.1,col = "grey")
+points(x=plot_data$nearest_Row,y=plot_data$nearest_Column,pch=16,cex=0.3,col="red")
+
+dev.off()
+```
+
+
+## fig2d_filtering_distance
+
+```{r}
+pdf(file = paste0(figure_dir,"/V2fig2d_filtering_distance.pdf"),width = 4,height = 3)
+
+plot.ecdf(x=intestline$Thickness,ylab = "Cumulative frequency",xlab="Distance to base layer",main = "")
+abline(v = 1000, lty= 2, col = "red")
+# title(main = "", xlab = "Distance to base layer")
+
+
+dev.off()
+```
+
+## fig2e_filtering__zscore
+
+```{r}
+pdf(file = paste0(figure_dir,"/V2fig2e_filtering_zscore.pdf"),width = 4,height = 3)
+
+## select successfully projected spots
+plot_data = subset(intestline,note == "Successfully projected")
+plot.ecdf(x=as.numeric(plot_data$zscore),ylab = "Cumulative frequency",xlab="Z-score of distances to the same base layer point",main = "")
+abline(v = 2, lty= 2, col = "red")
+# title(main = "", xlab = "Distance to base layer")
+
+
+dev.off()
+```
+
+## fig2f_connect_spot_n_baselayer_after_filtering
+
+```{r}
+pdf(file = paste0(figure_dir,"/V2fig2f_connect_spot_n_baselayer_after_filtering.pdf"),width = 8,height = 8)
+
+## select successfully projected spots
+plot_data = subset(intestline,note == "Successfully projected")
+## remove low noisy
+plot_data = subset(plot_data, as.numeric(Thickness) < 1000 & as.numeric(zscore) <2)
+
+plot(plot_data$x,plot_data$y,pch=16,cex=0)
+segments(x0=plot_data$x,y0=plot_data$y,x1 = plot_data$nearest_Row, y1=plot_data$nearest_Column,pch=16,cex=0.1,lwd=0.1,col = "#457b9d")
+points(x=plot_data$nearest_Row,y=plot_data$nearest_Column,pch=16,cex=0.3,col="red")
+
+dev.off()
+```
+
+## fig2g_linear_structure
+
+```{r}
+pdf(file = paste0(figure_dir,"/V2fig2g_linear_structure.pdf"),width = 30,height = 4)
+
+## select successfully projected spots
+plot_data = subset(intestline,note == "Successfully projected")
+## remove low noisy
+plot_data = subset(plot_data, as.numeric(Thickness) < 1000 & as.numeric(zscore) <2)
+
+plot(plot_data$Length,plot_data$Thickness,pch=16,cex=0.3,col = "#457b9d")
+
+dev.off()
+
+```
+# fig3
+
+## fig3a_rolled_image
+
+```{r}
+# markers = colnames(intestline)[18:34]
+
+markers = c("Villin","Olfm4","Ki67","SMA","Lysozyme")
+scale_marker = function(x){(x-min(x))/(max(x)-min(x))}
+
+
+
+for(i in markers){
+  pdf(file = paste0(figure_dir,"/V2fig3a_rolled_",i,".pdf"),width = 8,height = 8)
+  # i = "Ki67"
+  tmp_data = intestline[,c("x","y",i)]
+  tmp_data$scaled = scale_marker(intestline[,i])
+  tmp_data = tmp_data[order(tmp_data[, "scaled"],decreasing = FALSE),]
+  p = ggplot(tmp_data,aes(x,y,color=scaled))+
+    geom_point(size=0.01)+
+    scale_colour_gradientn(colors = c("#e6e6e6",
+                                            "#e60000",
+                                            "#e60000",
+                                            "#e60000", 
+                                            "#e60000"),
+                                 breaks = c(0,
+                                            0.5,
+                                            1))+
+    labs(title = i)+
+    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(
+            axis.line = element_line(color = 'black'),
+            panel.background = element_rect(fill = 'white', color = 'black'),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.border = element_blank()
+          )
+      
+  plot(p)
+  
+  dev.off()
+}
+
+```
+
+## fig3b_linear
+
+```{r}
+markers = colnames(intestline)[18:34]
+scale_marker = function(x){(x-min(x))/(max(x)-min(x))}
+markers = c("Villin","Olfm4","Ki67","SMA","Lysozyme")
+
+
+for(i in markers){
+  pdf(file = paste0(figure_dir,"/V2fig3b_linear_",i,".pdf"),width = 30,height = 4)
+  # i = "Lysozyme"
+  tmp_data = plot_data[,c("Length","Thickness",i)]
+  tmp_data$scaled = scale_marker(tmp_data[,i])
+  ## overlay large values on top
+  tmp_data = tmp_data[order(tmp_data[, "scaled"],decreasing = FALSE),]
+  p = ggplot(tmp_data,aes(Length,Thickness,color=scaled))+
+    geom_point(size=0.01)+
+    scale_colour_gradientn(colors = c("#e6e6e6",
+                                            "#e60000",
+                                            "#e60000",
+                                            "#e60000", 
+                                            "#e60000"),
+                                 breaks = c(0,
+                                            0.5,
+                                            1))+
+    labs(title = i)+
+    theme(plot.title = element_text(hjust = 0.5)) +
+    theme(
+            axis.line = element_line(color = 'black'),
+            panel.background = element_rect(fill = 'white', color = 'black'),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            panel.border = element_blank()
+          )
+      
+  plot(p)
+  dev.off()
+}
+
+
+```
+
+
