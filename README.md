@@ -4,7 +4,7 @@
 IntestLine is developed to map images of intestinal tissues prepared by Swiss-roll technique onto a line. It is suitable to process CODEX images or 10x spatial transcriptomics images, basically any images providing xy-coordinates.
 
 # User manual
-Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com/watch?v=DLZ-4taQk-s](https://www.youtube.com/watch?v=DLZ-4taQk-s)
+Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com/watch?v=-QMrW_MKLPo](https://www.youtube.com/watch?v=-QMrW_MKLPo)
 
 [Option 1: Use IntestLine via docker](#option1-docker)
 
