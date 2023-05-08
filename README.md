@@ -60,7 +60,5 @@ Step 4: Overlay parameters on the linear structure\
 4. Following the steps described in option 2.
 
 # Cite us
-Yuzeir, A.; Bejaran, D.; Grein, S.; Hasenauer, J.; Schlitzer, A.; Yu, J. IntestLine: A Shiny-Based Application to Map the Rolled Intestinal Tissue onto a Line; Bioinformatics, Volume 39, Issue 4, April 2023, btad140, https://doi.org/10.1093/bioinformatics/btad140
-
-
+Yuzeir, A.; Bejaran, D.; Grein, S.; Hasenauer, J.; Schlitzer, A.; Yu, J. IntestLine: A Shiny-Based Application to Map the Rolled Intestinal Tissue onto a Line; Bioinformatics, Volume 39, Issue 4, April 2023, btad140, https://doi.org/10.1093/bioinformatics/btad140.
 
