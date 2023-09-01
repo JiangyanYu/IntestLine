@@ -6,7 +6,7 @@ IntestLine is developed to map images of intestinal tissues prepared by Swiss-ro
 # User manual
 Tutorial on how to use the app can be found on Youtube: [https://www.youtube.com/watch?v=-QMrW_MKLPo](https://www.youtube.com/watch?v=-QMrW_MKLPo)
 
-[Option 1: Use IntestLine via docker](#option1-docker)
+[Option 1: Use IntestLine via docker](#option1-docker) Note: this docker image might not work in Mac with the M1-chip.
 
 [Option 2: Use IntestLine application implemented in FASTGenomics](#option2-fastgenomics)
 A quick way to try IntestLine. Be aware that the configureation of the server is very limited (2 vCPUs @2.1GHz, 16 GB RAM). Therefore it will take a while to unroll a large dataset. For example, 26s for the demo dataset containing 10k cells, and xx min for a dataset with 150k cells.
