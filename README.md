@@ -30,7 +30,7 @@ A quick way to try IntestLine. Be aware that the configureation of the server is
 5. Do your analysis according to the steps described in option 2.
 6. Ctrl+C in command terminal to close shiny app. exit - command to close the application
 
-# Option2: FASTGenomics
+# Option2: FASTGenomics (this option is only possible till mid-2024)
 Step 1: Upload data (Upper left panel in grey)\
 1.1 Go to website https://beta.fastgenomics.org/a/intestline To use the application, unfortunately you need to login with an account. You can register a your own account, but to test the application you can also use our IntestLine account (Username: intestline@gmail.com Password: intestline).\
 1.2 Upload CODEX-exported .csv file, containing x and y coordinates.\
